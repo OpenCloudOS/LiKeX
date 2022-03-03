@@ -10,3 +10,7 @@ RustKvm is implemented according to the requirements of container isolation, red
 ## route map
 
 The overall architecture of kvm will not change. First, the preliminary kvm interface (vm, vcpu) is implemented, so that a specified Guest App can be run in non-root mode under intel x86. Next, the mmu part of kvm will be gradually improved; finally, the effect of running with RustVmm will be achieved.
+
+## code path
+https://github.com/OpenCloudOS/linux
+This is from 'Rust-for-linux' which provide basic rust library for supporting linux kernel.
