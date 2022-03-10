@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/lib/modules/5.16.11-2-MANJARO/build/include",
+                "/lib/modules/5.16.11-2-MANJARO/build/arch/x86/include",
+                "/lib/modules/5.16.11-2-MANJARO/build/arch/x86/include/generated"
+
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}
