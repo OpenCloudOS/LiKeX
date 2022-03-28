@@ -1,0 +1,1 @@
+cmd_/home/zhou/codes/C/modules/OCOS_hw1/Module.symvers := sed 's/\.ko$$/\.o/' /home/zhou/codes/C/modules/OCOS_hw1/modules.order | scripts/mod/modpost -m -a  -o /home/zhou/codes/C/modules/OCOS_hw1/Module.symvers -e -i Module.symvers   -T -

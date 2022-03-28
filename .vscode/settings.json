@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "time.h": "c",
+        "kernel.h": "c",
+        "unistd.h": "c"
+    }
+}
