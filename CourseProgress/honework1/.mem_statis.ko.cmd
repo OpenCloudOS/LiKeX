@@ -1,1 +1,0 @@
-cmd_/home/zhou/codes/C/modules/OCOS_hw1/mem_statis.ko := ld -r -m elf_x86_64 --build-id=sha1  -T scripts/module.lds -o /home/zhou/codes/C/modules/OCOS_hw1/mem_statis.ko /home/zhou/codes/C/modules/OCOS_hw1/mem_statis.o /home/zhou/codes/C/modules/OCOS_hw1/mem_statis.mod.o;  true
