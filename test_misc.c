@@ -24,47 +24,47 @@ const unsigned char code[] = {
 
 
 struct kvm_userspace_memory_region region = {
-                .slot = 0,
-                .flags = 0,
-                .guest_phys_addr = 0x1000,
-                .memory_size = 0x1000,
+        .slot = 0,
+        .flags = 0,
+        .guest_phys_addr = 0x1000,
+        .memory_size = 0x1000,
 };
 
 struct kvm_regs regs = {
-                .rip = 0x1000,
-                .rax = 2,
-                .rbx = 2,
-                .rflags = 0x2,
+        .rip = 0x1000,
+        .rax = 2,
+        .rbx = 2,
+        .rflags = 0x2,
 };
 
 void print_run(struct kvm_run *run) 
 {
 
-  printf(" exit_reason 0x%x,", run->exit_reason );
-  printf(" 0x%x,", run->request_interrupt_window );
-  printf(" 0x%x \n", run->if_flag );
+        printf(" exit_reason 0x%x,", run->exit_reason );
+        printf(" 0x%x,", run->request_interrupt_window );
+        printf(" 0x%x \n", run->if_flag );
 }
 
 void print_regs(struct kvm_regs * regs)
 {
-  printf("rax = 0x%lx,", regs->rax);
-  printf("rbx = 0x%lx,", regs->rbx);
-  printf("rcx = 0x%lx,", regs->rcx);
-  printf("rdx = 0x%lx,", regs->rdx);
-  printf("rsi = 0x%lx,", regs->rsi);
-  printf("rdi = 0x%lx,", regs->rdi);
-  printf("rbp = 0x%lx,", regs->rbp);
-  printf("rsp = 0x%lx,", regs->rsp);
-  printf("rip = 0x%lx,", regs->rip);
-  printf("r8 = 0x%lx,", regs->r8);
-  printf("r9 = 0x%lx,", regs->r9);
-  printf("r10 = 0x%lx,", regs->r10);
-  printf("r11 = 0x%lx,", regs->r11);
-  printf("r12 = 0x%lx,", regs->r12);
-  printf("r13 = 0x%lx,", regs->r13);
-  printf("r14 = 0x%lx,", regs->r14);
-  printf("r15 = 0x%lx,", regs->r15);
-  printf("rflags = 0x%lx \n,", regs->rflags);
+        printf("rax = 0x%lx,", regs->rax);
+        printf("rbx = 0x%lx,", regs->rbx);
+        printf("rcx = 0x%lx,", regs->rcx);
+        printf("rdx = 0x%lx,", regs->rdx);
+        printf("rsi = 0x%lx,", regs->rsi);
+        printf("rdi = 0x%lx,", regs->rdi);
+        printf("rbp = 0x%lx,", regs->rbp);
+        printf("rsp = 0x%lx,", regs->rsp);
+        printf("rip = 0x%lx,", regs->rip);
+        printf("r8 = 0x%lx,", regs->r8);
+        printf("r9 = 0x%lx,", regs->r9);
+        printf("r10 = 0x%lx,", regs->r10);
+        printf("r11 = 0x%lx,", regs->r11);
+        printf("r12 = 0x%lx,", regs->r12);
+        printf("r13 = 0x%lx,", regs->r13);
+        printf("r14 = 0x%lx,", regs->r14);
+        printf("r15 = 0x%lx,", regs->r15);
+        printf("rflags = 0x%lx \n,", regs->rflags);
 } 
 void main(void)
 {
@@ -113,13 +113,14 @@ void main(void)
   ioctl(fd, KVM_GET_REGS, &regs);
   print_regs(&regs);
   printf(" set regs success \n");
-         while (1) {
+        while (1) {
                 ioctl(fd, KVM_RUN, NULL);
+                printf("switch num : %x", run->exit_reason);
                 switch (run->exit_reason) {
                         /* Handle exit */
                         case KVM_EXIT_HLT:
                                 printf("KVM_EXIT_HLT \n");
-                                return;
+                                goto out;
                         case KVM_EXIT_IO:
                                 if (run->io.direction == KVM_EXIT_IO_OUT &&
                                         run->io.size == 1 &&
@@ -131,19 +132,30 @@ void main(void)
                                 break;
                         case KVM_EXIT_FAIL_ENTRY:
                                 printf(" fail entry\n");
-                                return;
+                                goto out;
                         case KVM_EXIT_INTERNAL_ERROR:
                                 printf(" internal error\n");
-                                return;
+                                goto out;
                         default:
                                 printf(" default:0x%x\n", run->exit_reason);
                                 memset((char*)&regs, 0, sizeof(regs));
                                 ioctl(fd, KVM_GET_REGS, &regs);
                                 print_regs(&regs);
                                 print_run(run);
-                                return;
+                                goto out;
 
                 }
+                sleep(2);
         }
         printf(" end \n");
+out:
+        ;
+        int r = close(fd);
+        if(!r) {
+                printf("file closed\n");
+        }
+        else {
+                printf("fail to close the file\n");
+        }
+        return;
 }
