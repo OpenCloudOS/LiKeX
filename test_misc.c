@@ -26,12 +26,12 @@ const unsigned char code[] = {
 struct kvm_userspace_memory_region region = {
                 .slot = 0,
                 .flags = 0,
-                .guest_phys_addr = 0x1000,
+                .guest_phys_addr = 0,
                 .memory_size = 0x1000,
 };
 
 struct kvm_regs regs = {
-                .rip = 0x1000,
+                .rip = 0,
                 .rax = 2,
                 .rbx = 2,
                 .rflags = 0x2,
