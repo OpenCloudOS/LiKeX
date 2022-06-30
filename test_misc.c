@@ -19,6 +19,8 @@ const unsigned char code[] = {
         0xee,             /* out %al, (%dx) */
         0xb0, '\n',       /* mov $'\n', %al */
         0xee,             /* out %al, (%dx) */
+        0xb8, 0x00, 0x00, 0x00, 0x00,   /* mov $0x0,%eax*/
+        0x0f, 0xa2,                     /* cpuid */ 
         0xf4,             /* hlt */
  };
 
@@ -40,31 +42,31 @@ struct kvm_regs regs = {
 void print_run(struct kvm_run *run) 
 {
 
-        printf(" exit_reason 0x%x,", run->exit_reason );
-        printf(" 0x%x,", run->request_interrupt_window );
-        printf(" 0x%x \n", run->if_flag );
+  printf(" exit_reason 0x%x,", run->exit_reason );
+  printf(" 0x%x,", run->request_interrupt_window );
+  printf(" 0x%x \n", run->if_flag );
 }
 
 void print_regs(struct kvm_regs * regs)
 {
-        printf("rax = 0x%lx,", regs->rax);
-        printf("rbx = 0x%lx,", regs->rbx);
-        printf("rcx = 0x%lx,", regs->rcx);
-        printf("rdx = 0x%lx,", regs->rdx);
-        printf("rsi = 0x%lx,", regs->rsi);
-        printf("rdi = 0x%lx,", regs->rdi);
-        printf("rbp = 0x%lx,", regs->rbp);
-        printf("rsp = 0x%lx,", regs->rsp);
-        printf("rip = 0x%lx,", regs->rip);
-        printf("r8 = 0x%lx,", regs->r8);
-        printf("r9 = 0x%lx,", regs->r9);
-        printf("r10 = 0x%lx,", regs->r10);
-        printf("r11 = 0x%lx,", regs->r11);
-        printf("r12 = 0x%lx,", regs->r12);
-        printf("r13 = 0x%lx,", regs->r13);
-        printf("r14 = 0x%lx,", regs->r14);
-        printf("r15 = 0x%lx,", regs->r15);
-        printf("rflags = 0x%lx \n,", regs->rflags);
+  printf("rax = 0x%lx,", regs->rax);
+  printf("rbx = 0x%lx,", regs->rbx);
+  printf("rcx = 0x%lx,", regs->rcx);
+  printf("rdx = 0x%lx,", regs->rdx);
+  printf("rsi = 0x%lx,", regs->rsi);
+  printf("rdi = 0x%lx,", regs->rdi);
+  printf("rbp = 0x%lx,", regs->rbp);
+  printf("rsp = 0x%lx,", regs->rsp);
+  printf("rip = 0x%lx,", regs->rip);
+  printf("r8 = 0x%lx,", regs->r8);
+  printf("r9 = 0x%lx,", regs->r9);
+  printf("r10 = 0x%lx,", regs->r10);
+  printf("r11 = 0x%lx,", regs->r11);
+  printf("r12 = 0x%lx,", regs->r12);
+  printf("r13 = 0x%lx,", regs->r13);
+  printf("r14 = 0x%lx,", regs->r14);
+  printf("r15 = 0x%lx,", regs->r15);
+  printf("rflags = 0x%lx \n,", regs->rflags);
 } 
 void main(void)
 {
@@ -113,49 +115,48 @@ void main(void)
   ioctl(fd, KVM_GET_REGS, &regs);
   print_regs(&regs);
   printf(" set regs success \n");
-        while (1) {
+         while (1) {
                 ioctl(fd, KVM_RUN, NULL);
-                printf("switch num : %x", run->exit_reason);
+                printf("exit_reason : %x\n", run->exit_reason);
+                printf("checkpoint---1\n");
                 switch (run->exit_reason) {
                         /* Handle exit */
                         case KVM_EXIT_HLT:
                                 printf("KVM_EXIT_HLT \n");
-                                goto out;
+                                return;
+                        case KVM_EXIT_INTR:
+                                printf("KVM_EXIT_CPUID\n");
+                                break;                                
                         case KVM_EXIT_IO:
-                                if (run->io.direction == KVM_EXIT_IO_OUT &&
+                                // printf("in-exit info: %x, %x, %x, %x\n", run->io.direction, run->io.size, run->io.port, run->io.count);
+                                if (//run->io.direction == KVM_EXIT_IO_OUT &&
                                         run->io.size == 1 &&
                                         run->io.port == 0x3f8 &&
-                                        run->io.count == 1)
+                                        run->io.count == 1) {
                                         printf("exit io:%c \n", (*(((char *)run) + run->io.data_offset)));
-                                else
+                                
+                                }else{
+                                        // printf("checkpoint-----2\n");
                                         exit(1);
+                                }
+                                // 0
                                 break;
                         case KVM_EXIT_FAIL_ENTRY:
                                 printf(" fail entry\n");
-                                goto out;
+                                return;
                         case KVM_EXIT_INTERNAL_ERROR:
                                 printf(" internal error\n");
-                                goto out;
+                                return;
                         default:
                                 printf(" default:0x%x\n", run->exit_reason);
                                 memset((char*)&regs, 0, sizeof(regs));
                                 ioctl(fd, KVM_GET_REGS, &regs);
                                 print_regs(&regs);
                                 print_run(run);
-                                goto out;
+                                return;
 
                 }
-                sleep(2);
+                printf("checkpoint-------------3\n");
         }
         printf(" end \n");
-out:
-        ;
-        int r = close(fd);
-        if(!r) {
-                printf("file closed\n");
-        }
-        else {
-                printf("fail to close the file\n");
-        }
-        return;
 }
