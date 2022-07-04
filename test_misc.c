@@ -19,6 +19,10 @@ const unsigned char code[] = {
         0xee,             /* out %al, (%dx) */
         0xb0, '\n',       /* mov $'\n', %al */
         0xee,             /* out %al, (%dx) */
+        0xb8, 0x00, 0x00, 0x00, 0x00,   /* mov $0x0,%eax*/
+        /* If VM don't support cpuid, this instruction will cause 
+         a exit of internal_error. */
+        0x0f, 0xa2,                     /* cpuid */ 
         0xf4,             /* hlt */
  };
 
