@@ -1,8 +1,8 @@
-# RustKVM
+# LiKeX
 
-RustKVM is a KVM rust refactoring project. With the development of container, cloud native and serverless technologies, virtualization technology is mainly used for container isolation, so there is a need for lightweighthypervisor such as kvm.
+LiKeX(old name RustKVM) is a KVM rust refactoring project. With the development of container, cloud native and serverless technologies, virtualization technology is mainly used for container isolation, so there is a need for lightweighthypervisor such as kvm.
 
-In the future, LiKeX may be used as a trademark to replace "RustKVM". "Li" stands for lightweight, 'K' stands for KVM, 'e' stands for extension, and 'X' is a unified suffix for cloud native projects.
+Now LiKeX is used as a trademark to replace "RustKVM". "Li" stands for lightweight, 'K' stands for KVM, 'e' stands for extension, and 'X' is a unified suffix for cloud native projects.
 
 ## Advantage
 
