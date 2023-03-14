@@ -21,10 +21,11 @@ LiKeX 项目开发的目标是针对 FaaS 场景，提供轻量化的 Hypervisor
 ![Table](https://github.com/OpenCloudOS/LiKeX/blob/main/table.png)
 
 同时 LiKeX 在设计上尽量保持用户态接口与 KVM 兼容或者最小修改，这样对于基于 KVM 的设备模拟组件 VMM 可以较容易的迁移到 LiKeX 上。
+在支持FaaS方面,LiKeX有两种模式,一种模式是没有GuestOS,直接将一段可执行程序放到Guest态运行,这样达到了隔离的效果.另一种模式是存在一个GuestOS,可执行程序运行在GuestOS内.
 
 ## LiKeX 现状
 
-目前，LiKeX 项目已经开源到 OpenCloudOS 社区并在社区内进行持续演进，同时， LiKeX 项目已经实现阶段性目标，可以加载一段用户态程序到 Guest 态运行，并支持多个 memslot。
+目前，LiKeX 项目已经开源到 OpenCloudOS 社区并在社区内进行持续演进.LiKeX 项目已经实现阶段性目标，可以加载一段用户态程序到 Guest 态运行(第一种模式)，并支持多个 memslot。
 
 测试程序(精简)：
 
@@ -147,6 +148,12 @@ LiKeX 项目作为 OpenCloudOS 下一代云原生 OS 的一部分，其在整个
 ![OSArch](https://github.com/OpenCloudOS/LiKeX/blob/main/osarch.png)
 
 从架构上看，分为 Guest 和 Host 两部分，作为 Host 部分的重要组成部分，LiKeX 为设备模拟组件 VMM 和容器编排引擎提供了更轻量、更安全的 Rust 基础，保证兼容原有协议，并根据用户需求扩展新协议，从而实现自主可控的下一代云原生操作操作系统。
+
+## 规划
+下一步计划:
+1.为了支持第二种模式(即可运行一个GuestOS),需要实现一个用户态的轻量化设备模拟程序.在设备模拟程序中实现ioapic/pic的模拟.
+2.为了简化LiKeX的复杂度,指令模拟部分也在设备模拟程序中实现.
+3.LiKeX完整支持lapic.
 
 ## 总结
 
