@@ -18,14 +18,7 @@ LiKeX 中的「Li」代表轻量，「K」代表 KVM，「e」代表 extension�
 
 LiKeX 项目开发的目标是针对 FaaS 场景，提供轻量化的 Hypervisor 解决方案。在架构设计上，考虑到 FaaS 应用的特点：单实例短生命周期，单实例资源占用低，高实例密度，因此 LiKeX 在不少设计上与 KVM 有较大差异，部分对比项如下：
 
- ｜       项            ｜              KVM                   ｜              LiKeX                 ｜
- ｜ :-----------------: ｜ :--------------------------------: ｜ :--------------------------------: ｜
- ｜ 实现语言            ｜           C	                      ｜            Rust                    ｜
- ｜lapic/ioapic/pic 模拟｜	多种实现方式组合	      ｜lapic 内核模拟，ioapic/pic用户态模拟｜
- ｜    PIT 模拟	        ｜      内核或用户态都支持	      ｜          不实现                    ｜
- ｜KVM设备文件/vm/vcpu  ｜每个层面都是一个独立的文件句柄      ｜     共享一个文件句柄               ｜
- ｜    指令模拟	        ｜             内核态实现	      ｜          用户态实现                ｜
- ｜    mmio 处理	｜ept misconfig，通过mmu页表追踪mmio  ｜  	不使用 ept misconfig        ｜
+![Table](https://github.com/OpenCloudOS/LiKeX/blob/main/table.png)
 
 同时 LiKeX 在设计上尽量保持用户态接口与 KVM 兼容或者最小修改，这样对于基于 KVM 的设备模拟组件 VMM 可以较容易的迁移到 LiKeX 上。
 
