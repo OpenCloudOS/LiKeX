@@ -20,8 +20,11 @@ LiKeX 项目开发的目标是针对 FaaS 场景，提供轻量化的 Hypervisor
 
 ![Table](https://github.com/OpenCloudOS/LiKeX/blob/main/table.png)
 
+LiKeX优势主要体现在两个方面，一方面是由RUST语言提供的安全性。具体体现在rust kernel的封装已经确保LiKeX调用Linux kernel的kabi是安全的，不会出现空指针等内存安全问题。另一方面是轻量化，其体现在架构设计上：部分不常用的组件模拟在用户态，指令模拟在用户态，kvm设备/vm/vcpu 使用同一个文件句柄。体现在功能实现上：不支持设备透传等对于FAAS基本不会使用的功能。
+LiKeX针对kvm的优势（以及用户态采用轻量化的设备模拟）主要是轻量化带来的计算单元的启动/关闭耗时的减少，资源占用的减少，从而整体提升部署密度。
 同时 LiKeX 在设计上尽量保持用户态接口与 KVM 兼容或者最小修改，这样对于基于 KVM 的设备模拟组件 VMM 可以较容易的迁移到 LiKeX 上。
 在支持FaaS方面,LiKeX有两种模式,一种模式是没有GuestOS,直接将一段可执行程序放到Guest态运行,这样达到了隔离的效果.另一种模式是存在一个GuestOS,可执行程序运行在GuestOS内.
+
 
 ## LiKeX 现状
 
