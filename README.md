@@ -169,6 +169,8 @@ LiKeX 项目作为 OpenCloudOS 下一代云原生 OS 的一部分，其在整个
 https://github.com/OpenCloudOS/linux
 This is from 'Rust-for-linux' which provide basic rust library for supporting linux kernel.
 
+https://github.com/OpenCloudOS/kvmtool
+基于kvmtool开发LiKeX项目的轻量化VMM。
 ## test
 
 test_misc.c
